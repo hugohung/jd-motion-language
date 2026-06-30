@@ -1,0 +1,63 @@
+# 京东微信域动效调用流程
+
+本文件展示本 skill 在京东动效生产流程中的位置。
+
+## 推荐调用链
+
+```yaml
+pipeline:
+  - step: 1
+    skill: jd-motion-principles
+    role: 判断层 / 基座
+    input:  用户动效需求（如"抽奖开箱"）
+    output:
+      - 场景性格（platform / campaign）
+      - 情绪方向（functional / emotional）
+      - 元素层级（primary / secondary / ambient）
+      - 反模式清单
+
+  - step: 2
+    skill: jd-jd-motion-language
+    role: 参数层
+    input:  来自 jd-motion-principles 的判断结果
+    output:
+      - 坐标系（X / Y / Z）
+      - 运动模式（axis / morph / fade）
+      - 时长（ms）
+      - 缓动曲线（linear / cubic / elastic / dramatic-cubic）
+      - 编排规则
+
+  - step: 3
+    skill: <你的执行 skill>
+    role: 执行层
+    input:  结构化动效参数
+    output: Lottie JSON / CSS / Motion / GSAP
+
+  - step: 4
+    skill: jd-motion-principles
+    role: 审查层
+    input:  执行 skill 输出
+    output: 是否违反反模式、是否偏离情绪意图
+```
+
+## 何时只调用本 skill
+
+如果需求已经非常明确，且上游已给出判断结果，可直接调用本 skill 输出参数。例如：
+
+```yaml
+input:
+  scene: platform
+  motion: 弹窗从底部进入
+  axis: Y
+  type: macro
+output:
+  duration_ms: 140
+  easing: cubic
+  notes: 非 campaign 场景，禁用 elastic
+```
+
+## 何时必须联合调用
+
+- 用户需求里只有业务目标，没有具体动效形式（如"让抽奖更有惊喜感"）。
+- 需要判断这是平台动效还是互动动效。
+- 需要避免反模式（如从 0 缩放入场、匀速齐步走）。
