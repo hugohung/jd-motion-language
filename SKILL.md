@@ -1,7 +1,7 @@
 ---
 name: jd-motion-language
-version: "1.1.0"
-description: This skill should be used when translating a motion design intent into the JD WeChat-domain motion language. It provides the coordinate system, motion patterns, duration tables, easing curves, and composition rules for platform UI and campaign interactions. Use it as the parameterization layer after the jd-motion-principles skill (or a similar twelve-principles foundation) has established the scene character and emotional direction. It is designed to work in tandem with jd-motion-principles for JD WeChat-domain motion workflows.
+version: "1.1.1"
+description: 将动效设计意图转化为京东微信域动效语言。提供坐标系统、动效模式、时长表、缓动曲线和组合规则，适用于平台 UI 和运营互动场景。作为参数化层，在 jd-motion-principles（或类似的十二法则基座）确立场景特征和情绪方向后使用。与 jd-motion-principles 配合，构成京东微信域动效工作流。
 author: honghaoxiang
 agent_created: true
 trigger:
@@ -15,188 +15,188 @@ trigger:
 
 # 京东微信域界面动效语言
 
-## Core Philosophy
+## 核心理念
 
-- Use a shared coordinate system (X, Y, Z) so every motion is described in the same spatial language.
-- Choose a motion pattern first, then pick duration and easing. Do not start with a curve.
-- Keep platform scenes functional and fast; keep campaign scenes expressive and deliberate.
-- Treat duration and easing as part of the brand voice. The same transition feels different at 140 ms vs. 480 ms.
-- This skill gives parameters, not principles. Pair it with a 12-principles motion foundation skill for judgment and review.
+- 使用统一的坐标系统（X、Y、Z），使每个动效用相同的空间语言描述。
+- 先选动效模式，再选时长和缓动。不要从曲线开始。
+- 平台场景保持功能性和快速；运营场景保持表现力和从容。
+- 将时长和缓动视为品牌声音的一部分。同一过渡在 140ms 和 480ms 下感觉完全不同。
+- 此 skill 给出参数，不给出原则。搭配十二法则动效基座 skill 做判断和审查。
 
-## When to Use
+## 何时使用
 
-Use this skill when:
-- Designing or implementing motion for JD WeChat-domain products.
-- Converting a motion requirement into concrete duration, easing, and axis choices.
-- Writing a prompt for an execution skill that outputs Lottie JSON, CSS, Motion, or GSAP.
-- Reviewing whether an existing animation follows the JD motion language.
+以下场景使用此 skill：
+- 为京东微信域产品设计或实现动效。
+- 将动效需求转化为具体的时长、缓动和轴向选择。
+- 为执行 skill（输出 Lottie JSON、CSS、Motion 或 GSAP）编写提示词。
+- 审查现有动画是否符合京东动效语言。
 
-Do not use this skill for:
-- Deciding whether motion is needed at all. That is a UX/product decision.
-- 3D/shader effects beyond scale-based Z simulation.
-- Non-JD products unless explicitly adapting the language.
+以下场景不使用此 skill：
+- 决定动效是否需要。这是 UX/产品决策。
+- 基于 scale 的 Z 模拟以外的 3D/shader 效果。
+- 非京东产品（除非明确适配此语言）。
 
-## Coordinate System
+## 坐标系统
 
-All motion is described in X, Y, Z:
+所有动效用 X、Y、Z 描述：
 
-| Axis | Direction | Notes |
-|------|-----------|-------|
-| X | Horizontal left/right | Primary axis for lateral switches, carousels, tab transitions. |
-| Y | Vertical up/down | Primary axis for sheets, banners, dropdowns, gravity-driven motion. |
-| Z | Perpendicular to screen (depth) | Usually simulated with scale; may use real 3D transforms when supported. |
+| 轴向 | 方向 | 说明 |
+|------|------|------|
+| X | 水平左右 | 横向切换、轮播、tab 过渡的主轴。 |
+| Y | 垂直上下 | 浮层、横幅、下拉菜单、重力驱动动效的主轴。 |
+| Z | 垂直于屏幕（深度） | 通常用 scale 模拟；支持真实 3D 变换时可使用。 |
 
-Rules:
-- A single-axis motion should have a clear reason for that axis.
-- Prefer Z (scale) for emergence/dismissal of floating layers.
-- Prefer X or Y for spatial continuity between states.
+规则：
+- 单轴动效应有明确的轴向选择理由。
+- 浮层的出现/消失优先用 Z（scale）。
+- 状态间空间连续性优先用 X 或 Y。
 
-## Motion Types
+## 动效类型
 
-| Type | Scope | Examples |
-|------|-------|----------|
-| Micro | Element-level feedback | Button press, icon toggle, input shake, like burst, delete confirmation. |
-| Macro | Component-level or above | Sheet slide, page push, container morph, banner drop, page transition. |
+| 类型 | 范围 | 示例 |
+|------|------|------|
+| 微动效 | 元素级反馈 | 按钮按压、图标切换、输入框抖动、点赞爆发、删除确认。 |
+| 宏动效 | 组件级及以上 | 浮层滑动、页面推进、容器变形、横幅落下、页面过渡。 |
 
-Match the duration table to the type and scene.
+时长表需要匹配动效类型和场景。
 
-## Motion Patterns
+## 动效模式
 
-Choose exactly one pattern for each transition:
+每次过渡选择一个模式：
 
-| Pattern | Trigger | Typical Use |
-|---------|---------|-------------|
-| Axis motion | A spatial relationship exists between before and after states | Tab switch (X/Y), sheet enter/exit (Y), popup scale (Z). |
-| Container morph | Shared content transforms into a child or related state | Card expands to detail page, search bar expands to results. |
-| Fade in/out | No logical progression between the two states | Unrelated elements appearing or disappearing independently. |
+| 模式 | 触发条件 | 典型用途 |
+|------|----------|----------|
+| 轴向运动 | 前后状态存在空间关系 | Tab 切换（X/Y）、浮层进入/退出（Y）、弹窗缩放（Z）。 |
+| 容器变形 | 共享内容变换为子级或关联状态 | 卡片展开为详情页、搜索框展开为结果。 |
+| 淡入淡出 | 两个状态间无逻辑渐进关系 | 不相关的元素独立出现或消失。 |
 
-Rules:
-- Do not combine axis motion and fade for the same element unless one is a background layer.
-- For container morph, preserve the shared element's identity; do not let it disappear and reappear.
+规则：
+- 同一元素不要同时使用轴向运动和淡入淡出，除非一个是背景层。
+- 容器变形时需保持共享元素的身份感，不要让它消失再出现。
 
-## Scene Classification
+## 场景分类
 
-The language splits every requirement into one of two scenes:
+每个需求归入两类场景之一：
 
-| Scene | Goal | Character |
-|-------|------|-----------|
-| Platform | Efficiency, clarity, low friction | Fast, restrained, no elastic. |
-| Campaign | Delight, engagement, brand expression | Slower, expressive, elastic allowed. |
+| 场景 | 目标 | 特征 |
+|------|------|------|
+| 平台 | 效率、清晰、低摩擦 | 快速、克制、不允许弹性。 |
+| 运营 | 愉悦、参与、品牌表达 | 较慢、表现力、允许弹性。 |
 
-Determine the scene before choosing any parameter.
+选择任何参数前先确定场景。
 
-## Duration Tables
+## 时长表
 
-### Platform Scene
+### 平台场景
 
-| Element / Motion | Duration |
-|------------------|----------|
-| Micro transform or fade in/out | 100 ms |
-| Component micro transform or fade in/out | 200 ms |
-| Component element axis motion | 140 ms |
-| Popup/dialog scale (Z) | 140 ms |
-| Sheet slide up/down (Y) | 140 ms |
-| Dropdown menu | 140 ms |
-| Container morph | 200 ms |
-| Page-level transition | 200 ms |
+| 元素/动效 | 时长 |
+|-----------|------|
+| 微动效变换或淡入淡出 | 100 ms |
+| 组件微动效变换或淡入淡出 | 200 ms |
+| 组件元素轴向运动 | 140 ms |
+| 弹窗/对话框缩放（Z） | 140 ms |
+| 浮层滑入/滑出（Y） | 140 ms |
+| 下拉菜单 | 140 ms |
+| 容器变形 | 200 ms |
+| 页面级过渡 | 200 ms |
 
-### Campaign Scene
+### 运营场景
 
-| Element / Motion | Duration |
-|------------------|----------|
-| Micro transform or fade in/out | 100 ms |
-| Component micro transform or fade in/out | 200 ms |
-| Component element axis motion | 140–240 ms |
-| Popup/dialog scale (Z) | 360–480 ms |
-| Sheet slide up/down (Y) | 360–480 ms |
-| Dropdown menu | 240 ms |
-| Banner | 360 ms |
-| Ambient entrance effect | 0–800 ms |
-| Container morph | 240–360 ms |
+| 元素/动效 | 时长 |
+|-----------|------|
+| 微动效变换或淡入淡出 | 100 ms |
+| 组件微动效变换或淡入淡出 | 200 ms |
+| 组件元素轴向运动 | 140–240 ms |
+| 弹窗/对话框缩放（Z） | 360–480 ms |
+| 浮层滑入/滑出（Y） | 360–480 ms |
+| 下拉菜单 | 240 ms |
+| 横幅 | 360 ms |
+| 氛围入场效果 | 0–800 ms |
+| 容器变形 | 240–360 ms |
 
-Rules:
-- For campaign, choose the shorter end when the motion is a response to user action; choose the longer end for ambient or staged reveals.
-- Never exceed 1000 ms for UI feedback. Entrance ambience may approach 800 ms but should feel like background, not blocking.
+规则：
+- 运营场景中，动效是响应用户操作时选较短值；氛围或分阶段揭示时选较长值。
+- UI 反馈不超过 1000 ms。入场氛围可接近 800 ms，但应感觉像背景而非阻塞。
 
-## Easing Tables
+## 缓动表
 
-### Platform Scene
+### 平台场景
 
-| Duration | Allowed Easing | Notes |
-|----------|---------------|-------|
-| ≤ 200 ms | `linear` | Short functional motions read as immediate. |
-| > 200 ms | `cubic-bezier(0.66, 0, 0.34, 1)` | Smooth acceleration and deceleration. |
-| Element entering/leaving viewport | `linear` | Avoid drama for viewport transitions. |
+| 时长 | 允许缓动 | 说明 |
+|------|----------|------|
+| ≤ 200 ms | `linear` | 短功能动效应感觉即时。 |
+| > 200 ms | `cubic-bezier(0.66, 0, 0.34, 1)` | 平滑加速和减速。 |
+| 元素进出视口 | `linear` | 视口过渡避免戏剧性。 |
 
-Platform rules:
-- Do not use elastic easing.
-- Do not use `ease-in` for entrances or `ease-out` for exits.
+平台规则：
+- 不使用弹性缓动。
+- 入场不使用 `ease-in`，退场不使用 `ease-out`。
 
-### Campaign Scene
+### 运营场景
 
-| Axis | Duration | Primary Easing | Alternative |
-|------|----------|----------------|-------------|
-| X or Y | 100–360 ms | `cubic-bezier(0.66, 0, 0.34, 1)` | `elastic-bezier(0.47, 0.20, 0.41, 1.37)` |
-| X or Y | > 360 ms | `cubic-bezier(0.66, 0, 0.34, 1)` | — |
-| Z (scale) | 100–200 ms | `cubic-bezier(0.66, 0, 0.34, 1)` | — |
-| Z (scale) | 200–360 ms | `elastic-bezier(0.47, 0.20, 0.41, 1.37)` | — |
-| Z (scale) | > 360 ms | `cubic-bezier(0.84, 0, 0.16, 1)` | — |
+| 轴向 | 时长 | 主缓动 | 备选 |
+|------|------|--------|------|
+| X 或 Y | 100–360 ms | `cubic-bezier(0.66, 0, 0.34, 1)` | `elastic-bezier(0.47, 0.20, 0.41, 1.37)` |
+| X 或 Y | > 360 ms | `cubic-bezier(0.66, 0, 0.34, 1)` | — |
+| Z（scale） | 100–200 ms | `cubic-bezier(0.66, 0, 0.34, 1)` | — |
+| Z（scale） | 200–360 ms | `elastic-bezier(0.47, 0.20, 0.41, 1.37)` | — |
+| Z（scale） | > 360 ms | `cubic-bezier(0.84, 0, 0.16, 1)` | — |
 
-Campaign rules:
-- Elastic is allowed only for Z-axis scale or small XY overshoots.
-- For long scale motions (> 360 ms), use the dramatic cubic curve.
-- For elements entering or leaving the viewport, prefer `linear` unless the element is part of a staged campaign reveal.
+运营规则：
+- 弹性缓动仅允许用于 Z 轴 scale 或小幅 XY overshoot。
+- 长 scale 动效（> 360 ms）使用戏剧化缓动曲线。
+- 进出视口的元素优先使用 `linear`，除非是运营分阶段揭示的一部分。
 
-## Axis-Specific Rules
+## 轴向特定规则
 
-### X Axis
-- Use for lateral continuity: tabs, carousels, step indicators.
-- Single-axis X motion should feel like a sliding panel, not a bouncing object.
-- In platform scenes, keep X motion strictly linear or cubic; no elastic.
+### X 轴
+- 用于横向连续性：tab、轮播、步骤指示器。
+- 单轴 X 运动应感觉像滑动面板，而非弹跳对象。
+- 平台场景中 X 运动严格 linear 或 cubic，不允许弹性。
 
-### Y Axis
-- Use for vertical gravity: sheets, banners, dropdowns, toasts.
-- Upward motion should decelerate; downward motion should accelerate to feel natural.
-- For campaign banners, allow a slight overshoot on settle.
+### Y 轴
+- 用于垂直重力感：浮层、横幅、下拉菜单、toast。
+- 向上运动应减速；向下运动应加速以感觉自然。
+- 运营横幅允许落地时小幅 overshoot。
 
-### Z Axis
-- Use for depth/emergence: dialogs, popups, tooltips, badges.
-- Prefer scale simulation. Real 3D is optional and should degrade gracefully.
-- Small Z pops (badges, toasts) should be fast (100–140 ms).
-- Large Z reveals (campaign dialogs) can be slower (360–480 ms) with elastic.
+### Z 轴
+- 用于深度/浮现：对话框、弹窗、tooltip、徽标。
+- 优先使用 scale 模拟。真实 3D 可选且应优雅降级。
+- 小 Z 弹出（徽标、toast）应快速（100–140 ms）。
+- 大 Z 揭示（运营对话框）可以较慢（360–480 ms）并使用弹性。
 
-## Composition Rules
+## 组合规则
 
-### Path Order
-- Continuity-driven content uses smooth paths that respect gravity and reading direction.
-- Do not make elements exit the viewport only to re-enter for a layout change.
+### 路径顺序
+- 连续性驱动的内容使用平滑路径，尊重重力和阅读方向。
+- 不要让元素移出视口再重新进入来完成布局变更。
 
-### XY Dual Axis
-- For staged campaign motion, use curved paths rather than straight lines.
-- Y-axis acceleration should be gentle at the start and steeper near the end.
-- Avoid adding a second axis purely for decoration.
+### XY 双轴
+- 运营分阶段动效使用曲线路径而非直线。
+- Y 轴加速应在开始处轻柔，末端变陡。
+- 避免仅为装饰添加第二个轴。
 
-### XY Single Axis
-- Non-campaign single-axis motion must not use elastic easing.
-- Do not introduce a second axis if the content relationship is single-dimensional.
+### XY 单轴
+- 非运营单轴动效不得使用弹性缓动。
+- 内容关系是单一维度的，不要引入第二个轴。
 
-### XY Dual-Axis Grid Motion
-- When reordering grid items, move each item along the shortest straight path to its new cell.
-- Preserve spatial proximity; do not cross paths in a way that swaps identities.
+### XY 双轴网格运动
+- 重新排序网格项时，每个项沿最短直线路径移动到新格子。
+- 保持空间邻近性；不要交叉路径导致身份交换。
 
-### Platform Loading
-- Prefer skeleton screens over spinners for content loading.
-- After content loads, introduce primary content before secondary content.
-- Limit guided highlights to one occurrence per session.
+### 平台加载
+- 内容加载优先使用骨架屏而非旋转器。
+- 内容加载后，主导内容先于辅助内容引入。
+- 引导高亮每 session 最多出现一次。
 
-### Campaign Staging
-- Build a clear beat structure: prepare → release → follow-through.
-- Let the primary element move first, secondary elements trail, and ambient elements settle last.
-- Do not let decorative particles steal attention from the main message.
+### 运营分阶段编排
+- 建立清晰的节拍结构：预备 → 释放 → 跟随。
+- 主导元素最先动，辅助元素跟随，氛围元素最后落位。
+- 不要让装饰粒子抢了主信息的风头。
 
-## Mapping to Lottie / CSS / Motion / GSAP
+## 映射到 Lottie / CSS / Motion / GSAP
 
-This skill does not prescribe framework syntax. Pass the output to an execution skill with these fields:
+此 skill 不规定框架语法。将输出传递给执行 skill 时附带以下字段：
 
 ```json
 {
@@ -213,38 +213,38 @@ This skill does not prescribe framework syntax. Pass the output to an execution 
 }
 ```
 
-Execution skill maps:
+执行 skill 映射：
 - `cubic` → `cubic-bezier(0.66, 0, 0.34, 1)`
 - `elastic` → `elastic-bezier(0.47, 0.20, 0.41, 1.37)`
 - `dramatic-cubic` → `cubic-bezier(0.84, 0, 0.16, 1)`
 
-## Integration with Motion-Principles Skill
+## 与动效原则 skill 的配合
 
-When paired with a 12-principles foundation skill, use this order:
+与十二法则基座 skill 搭配使用时，按此顺序：
 
-1. Foundation skill decides the scene character and emotional intent.
-2. This skill picks the JD-specific coordinate system, pattern, duration, and easing.
-3. Execution skill renders the final animation.
-4. Foundation skill reviews the result against anti-patterns.
+1. 基座 skill 决定场景特征和情绪意图。
+2. 本 skill 选择京东专属的坐标系统、模式、时长和缓动。
+3. 执行 skill 渲染最终动画。
+4. 基座 skill 对照反模式审查结果。
 
-This skill is the parameterization layer; the foundation skill is the judgment layer.
+本 skill 是参数化层；基座 skill 是判断层。
 
-## References
+## 参考资料
 
-Load these references when more detail is needed:
+需要更多细节时加载以下参考：
 
-- `references/timing-table.md` — Complete platform/campaign duration matrix.
-- `references/easing-table.md` — Curve definitions and permitted combinations.
-- `references/axis-mapping.md` — XYZ axis usage and common component mappings.
-- `references/composition-rules.md` — Expanded composition and staging rules.
-- `references/framework-mapping.md` — How the JSON output maps to common animation frameworks.
+- `references/timing-table.md` — 完整的平台/运营时长矩阵。
+- `references/easing-table.md` — 曲线定义及允许的组合。
+- `references/axis-mapping.md` — XYZ 轴向用法及常见组件映射。
+- `references/composition-rules.md` — 扩展的组合与编排规则。
+- `references/framework-mapping.md` — JSON 输出如何映射到常见动画框架。
 
-## Anti-Patterns
+## 反模式
 
-- Choosing a curve before choosing a motion pattern.
-- Using elastic easing in a platform scene.
-- Using a single duration for every element in a campaign animation.
-- Animating unrelated elements in perfect synchrony.
-- Letting decorative motion compete with the primary action.
-- Ignoring the difference between X, Y, and Z semantics.
-- Applying dramatic cubic curves to micro interactions.
+- 在选定动效模式之前先选曲线。
+- 在平台场景中使用弹性缓动。
+- 运营动画中所有元素使用统一时长。
+- 不相关的元素完美同步动画。
+- 装饰动效与主导动作竞争注意力。
+- 忽略 X、Y、Z 的语义差异。
+- 对微交互应用戏剧化缓动曲线。
