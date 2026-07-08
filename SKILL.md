@@ -1,6 +1,6 @@
 ---
 name: jd-motion-language
-version: "1.1.1"
+version: "1.1.2"
 description: 将动效设计意图转化为京东微信域动效语言。提供坐标系统、动效模式、时长表、缓动曲线和组合规则，适用于平台 UI 和运营互动场景。作为参数化层，在 jd-motion-principles（或类似的十二法则基座）确立场景特征和情绪方向后使用。与 jd-motion-principles 配合，构成京东微信域动效工作流。
 author: honghaoxiang
 agent_created: true
